@@ -5,8 +5,7 @@ import { router } from "./router";
 
 http
   .createServer(function(req: http.IncomingMessage, res: http.ServerResponse) {
-    console.log(req.url);
-    console.log(req.method);
+    console.log(new Date().toLocaleString(), "Req", req.method, req.url);
 
     if (!req.url || req.url === "/") {
       return notFoundResponse(req, res);

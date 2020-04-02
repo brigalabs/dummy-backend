@@ -67,7 +67,7 @@ export function handlePut(
 
 export function handleGet(req: http.IncomingMessage, res: http.ServerResponse) {
   const { tableName, id } = parseRequest(req);
-  console.log({ tableName, id });
+
   if (id) {
     const value = getOne(tableName, id);
     if (value) {
