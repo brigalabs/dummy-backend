@@ -1,5 +1,16 @@
-import { values, get, unset, set, debounce } from "lodash";
-import { Database, Row } from "./types";
+import {
+  values,
+  get,
+  unset,
+  set,
+  debounce,
+  slice,
+  sortBy,
+  filter,
+  includes,
+  startsWith
+} from "lodash";
+import { Database, Row, DBOptions, DBFilterBy, ManyRow } from "./types";
 import { v4 } from "uuid";
 import fs from "fs";
 
@@ -93,7 +104,67 @@ export function getOne(tableName: string, id: string): Row | void {
   }
 }
 
-export function getMany(tableName: string): Row[] {
+const defaultOptions = {
+  sortBy: "",
+  sortDirection: "ASC",
+  filterBy: "",
+  page: 0,
+  pageSize: 2
+};
+
+export function getMany(tableName: string, options: DBOptions): ManyRow {
   const table = get(database, tableName);
-  return values(table);
+
+  const opts = {
+    ...defaultOptions,
+    ...options
+  };
+
+  const sortDirection = opts.sortDirection === "DESC" ? "DESC" : "ASC";
+
+  // transform the existing table into a list
+  let recordList = values(table);
+
+  // filter the list for every filter we receive
+  const filters: DBFilterBy[] = [];
+  for (const key in opts) {
+    if (startsWith(key, "filter_")) {
+      filters.push({
+        attribute: key.replace(/^filter_/, ""),
+        value: get(opts, key)
+      });
+    }
+  }
+
+  if (filters.length) {
+    for (const f of filters) {
+      const match = new RegExp(f.value, "i");
+
+      recordList = filter(recordList, record =>
+        match.test(get(record, f.attribute))
+      );
+    }
+  }
+
+  // Sort the results
+  if (opts.sortBy) {
+    recordList = sortBy(recordList, opts.sortBy);
+
+    if (sortDirection !== "ASC") {
+      recordList.reverse();
+    }
+  }
+
+  // compute the page position
+  const start = opts.page * opts.pageSize;
+  const end = opts.page + 1 * opts.pageSize;
+
+  return {
+    data: slice(recordList, start, end),
+    total: recordList.length,
+    pageSize: opts.pageSize,
+    page: opts.page,
+    sortBy: opts.sortBy,
+    sortDirection
+  };
 }

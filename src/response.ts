@@ -18,13 +18,16 @@ export function notFoundResponse(
 export function foundResponse(
   req: http.IncomingMessage,
   res: http.ServerResponse,
-  data: {}
+  data: {},
+  args?: {}
 ) {
+  console.log({ data, args });
   res.writeHead(200, { "Content-Type": "application/json" });
   res.write(
     JSON.stringify({
       status: "success",
-      data
+      data,
+      ...args
     })
   );
   res.end();

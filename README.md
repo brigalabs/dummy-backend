@@ -40,6 +40,18 @@ your users table, use the following URLs:
 | DELETE | /users/123 | delete the user with ID 123             |
 | POST   | /users     | create a user (generate the ID for you) |
 
+## Listing
+
+Listing often allows for a few additional like, pagination, filtering and sorting. Every listing endpoint accepts the following query arguments:
+
+| argument      | description                                | example             | default |
+| ------------- | ------------------------------------------ | ------------------- | ------- |
+| page          | The page number starting at 0              | ?page=0             | 0       |
+| pageSize      | the number of item per page                | ?pageSize=5         | 10      |
+| sortBy        | The attribute to sort the listing by       | ?sortBy=createdAt   | -       |
+| sortDirection | Sorting direction when sortBy is provided  | ?sortDirection=DESC | ASC     |
+| filter_xxx    | Filter record that must contains the value | ?filter_name=john   | -       |
+
 ## Persistence
 
 By default the database is stored in memory and is backed up to every

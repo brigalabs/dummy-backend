@@ -1,5 +1,6 @@
 import { foundResponse, notFoundResponse, errorResponse } from "./response";
 import http from "http";
+import url from "url";
 import { parseRequest } from "./utils";
 import {
   deleteRecord,
@@ -66,7 +67,7 @@ export function handlePut(
 }
 
 export function handleGet(req: http.IncomingMessage, res: http.ServerResponse) {
-  const { tableName, id } = parseRequest(req);
+  const { tableName, id, query } = parseRequest(req);
 
   if (id) {
     const value = getOne(tableName, id);
@@ -76,6 +77,8 @@ export function handleGet(req: http.IncomingMessage, res: http.ServerResponse) {
       return notFoundResponse(req, res);
     }
   } else {
-    return foundResponse(req, res, getMany(tableName));
+    const { data, ...rest } = getMany(tableName, query);
+
+    return foundResponse(req, res, data, rest);
   }
 }
