@@ -21,7 +21,6 @@ export function foundResponse(
   data: {},
   args?: {}
 ) {
-  console.log({ data, args });
   res.writeHead(200, { "Content-Type": "application/json" });
   res.write(
     JSON.stringify({

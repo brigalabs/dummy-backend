@@ -42,7 +42,11 @@ your users table, use the following URLs:
 
 ## Listing
 
-Listing often allows for a few additional like, pagination, filtering and sorting. Every listing endpoint accepts the following query arguments:
+Listing often allows for a few additional like, pagination, filtering and sorting.
+
+### Listing query arguments
+
+Every listing endpoint accepts the following query arguments:
 
 | argument      | description                                | example             | default |
 | ------------- | ------------------------------------------ | ------------------- | ------- |
@@ -51,6 +55,38 @@ Listing often allows for a few additional like, pagination, filtering and sortin
 | sortBy        | The attribute to sort the listing by       | ?sortBy=createdAt   | -       |
 | sortDirection | Sorting direction when sortBy is provided  | ?sortDirection=DESC | ASC     |
 | filter_xxx    | Filter record that must contains the value | ?filter_name=john   | -       |
+
+### Listing Response
+
+Since you can provide pagination, it makes sense to have a response that allow you to display proper pagination. A call
+to a the listing [endpoint of users](localhost:8080/users/?pageSize=2&sortBy=id&sortDirection=DESC) would return:
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "email": "what@example.com",
+      "name": "John what",
+      "id": "f3a0c7c7-b9b0-4f91-a485-a643d653508a",
+      "createdAt": "2020-04-02T19:58:26.021Z",
+      "updatedAt": "2020-04-02T19:58:26.021Z"
+    },
+    {
+      "email": "what@example.com",
+      "name": "John what",
+      "id": "f0ccc71e-9411-454d-895a-3dc528e78872",
+      "createdAt": "2020-04-02T19:58:38.601Z",
+      "updatedAt": "2020-04-02T19:58:38.601Z"
+    }
+  ],
+  "total": 10,
+  "pageSize": 2,
+  "page": 0,
+  "sortBy": "id",
+  "sortDirection": "DESC"
+}
+```
 
 ## Persistence
 

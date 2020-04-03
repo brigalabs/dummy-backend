@@ -121,6 +121,8 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
   };
 
   const sortDirection = opts.sortDirection === "DESC" ? "DESC" : "ASC";
+  const page = parseInt(opts.page as any, 10);
+  const pageSize = parseInt(opts.pageSize as any, 10);
 
   // transform the existing table into a list
   let recordList = values(table);
@@ -156,14 +158,14 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
   }
 
   // compute the page position
-  const start = opts.page * opts.pageSize;
-  const end = opts.page + 1 * opts.pageSize;
+  const start = page * pageSize;
+  const end = page + 1 * pageSize;
 
   return {
     data: slice(recordList, start, end),
     total: recordList.length,
-    pageSize: opts.pageSize,
-    page: opts.page,
+    pageSize: pageSize,
+    page: page,
     sortBy: opts.sortBy,
     sortDirection
   };
