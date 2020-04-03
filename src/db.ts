@@ -7,45 +7,34 @@ import {
   slice,
   sortBy,
   filter,
-  includes,
   startsWith
 } from "lodash";
 import { Database, Row, DBOptions, DBFilterBy, ManyRow } from "./types";
 import { v4 } from "uuid";
 import fs from "fs";
-
-const databaseFilename = "database.json";
+import { config } from "./config";
+import { log } from "./log";
 
 let database: Database = {};
 
 const syncDatabaseFile = debounce(() => {
   const strDb = JSON.stringify(database, null, 2);
-  fs.writeFile(databaseFilename, strDb, error => {
+  fs.writeFile(config.datafile, strDb, error => {
     if (error) {
-      console.log(
-        new Date().toLocaleString(),
-        `Error sync database to file ${databaseFilename}`,
-        error
-      );
+      log(`Error sync database to file ${config.datafile}`, error);
     } else {
-      console.log(
-        new Date().toLocaleString(),
-        `sync to file ${databaseFilename} success.`
-      );
+      log(`sync to file ${config.datafile} success.`);
     }
   });
 }, 1000);
 
-fs.readFile(databaseFilename, function(err, buf) {
+fs.readFile(config.datafile, function(err, buf) {
   if (err) {
-    console.error("Could not read", databaseFilename);
+    console.error("Could not read", config.datafile);
   } else {
-    console.log(
-      new Date().toLocaleString(),
-      `Loading data from ${databaseFilename} ...`
-    );
+    log(`Loading data from ${config.datafile} ...`);
     database = JSON.parse(buf.toString()) as Database;
-    console.log(new Date().toLocaleString(), "Loading data done.");
+    log("Loading data done.");
   }
 });
 

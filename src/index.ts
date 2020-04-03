@@ -1,36 +1,25 @@
-import http from "http";
-import { Row } from "./types";
-import { notFoundResponse } from "./response";
-import { router } from "./router";
+import yargs from "yargs";
+import { start } from "./server";
+import { setPort, setDatafile } from "./config";
 
-http
-  .createServer(function(req: http.IncomingMessage, res: http.ServerResponse) {
-    console.log(new Date().toLocaleString(), "Req", req.method, req.url);
-
-    if (!req.url || req.url === "/") {
-      return notFoundResponse(req, res);
-    }
-
-    const reqData: any[] = [];
-
-    req
-      .on("error", err => {
-        console.error(err);
-      })
-      .on("data", chunk => {
-        reqData.push(chunk);
-      })
-      .on("end", () => {
-        let body = {};
-
-        try {
-          const strData = Buffer.concat(reqData).toString();
-          body = strData ? JSON.parse(strData) : {};
-        } catch (error) {
-          console.log(error);
-        }
-
-        router(req, res, body as Row);
-      });
+const argv = yargs
+  .scriptName("dummy-backend")
+  .option("port", {
+    alias: "p",
+    default: 8080,
+    describe: "The port to start the server on",
+    type: "number"
   })
-  .listen(8080);
+  .option("datafile", {
+    alias: "d",
+    default: "database.json",
+    describe: "The filename to use to load and save the database",
+    type: "string"
+  })
+  .help()
+  .alias("help", "h").argv;
+
+setPort(argv.port);
+setDatafile(argv.datafile);
+
+start();

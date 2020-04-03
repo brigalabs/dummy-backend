@@ -27,6 +27,22 @@ Run the server using `yarn start`
 yarn start
 ```
 
+## Arguments
+
+The start call accepts the following arguments
+
+| Method   | alias | description                                   | default       |
+| -------- | ----- | --------------------------------------------- | ------------- |
+| port     | p     | change the serving port                       | 8080          |
+| datafile | d     | sets the filename where the data is persisted | database.json |
+
+```
+$ yarn start --d foo.json -p 8000
+4/2/2020, 8:11:45 PM Serving request at http://localhost:8000
+4/2/2020, 8:11:45 PM Loading data from foo.json ...
+4/2/2020, 8:11:45 PM Loading data done.
+```
+
 ## Interactions
 
 By default the server will run on port 8080 on your localhost. The convention is having the table name as the first part of the URL followed by optional ID. For example, if you want to interact with
@@ -58,8 +74,8 @@ Every listing endpoint accepts the following query arguments:
 
 ### Listing Response
 
-Since you can provide pagination, it makes sense to have a response that allow you to display proper pagination. A call
-to a the listing [endpoint of users](localhost:8080/users/?pageSize=2&sortBy=id&sortDirection=DESC) would return:
+Since you can provide pagination, it makes sense to have a response that allows you to display proper pagination. A call
+to a the listing [endpoint of users](http://localhost:8080/users/?pageSize=2&sortBy=id&sortDirection=DESC) would return:
 
 ```json
 {
