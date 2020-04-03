@@ -7,8 +7,8 @@ A ready-to-go REST API compliant server so you can prototype your front end. Jus
 - No VM
 - No authentication
 
-The server will create tables and records as you need them. You can
-create, update, delete, get, list (including query, sorting, pagination) them using standard CRUD requests.
+The server will create and persist tables and records as you need them. You can
+create, update, delete, get, list (including query, sorting, pagination) using the standard CRUD requests you know (see below).
 
 When you're satified with your solution, you can start building the backend that matches your feature and not the opposite.
 
@@ -33,17 +33,17 @@ Run the server using `yarn start`
 yarn start
 ```
 
-## Arguments
+### Arguments
 
 The start call accepts the following arguments
 
-| Method   | alias | description                                   | default       |
-| -------- | ----- | --------------------------------------------- | ------------- |
-| port     | p     | change the serving port                       | 8080          |
-| datafile | d     | sets the filename where the data is persisted | database.json |
+| Method   | alias | description                              | default       |
+| -------- | ----- | ---------------------------------------- | ------------- |
+| port     | p     | set the serving port                     | 8080          |
+| datafile | d     | set the filename where data is persisted | database.json |
 
 ```
-$ yarn start --d foo.json -p 8000
+$ yarn start -d foo.json -p 8000
 4/2/2020, 8:11:45 PM Serving request at http://localhost:8000
 4/2/2020, 8:11:45 PM Loading data from foo.json ...
 4/2/2020, 8:11:45 PM Loading data done.
@@ -63,9 +63,22 @@ For example, if you want to interact with a users table, use the following URLs:
 | POST   | /users     | create a user (generate the ID for you) |
 | GET    | /users/    | return a list of users (more below)     |
 
+## Creation
+
+Every object created will be augmented with 3 attributes:
+
+- `id`: The uniq identifier, here as UUID
+- `createdAt`: A ISO date string (so it's sortable and comparable)
+- `updatedAt`: A ISO date string (so it's sortable and comparable)
+
+## Update
+
+Update will also update the `updatedAt` to the current date.
+Note that, when updating, the object needs to exists or you'll get a 404 response.
+
 ## Listing
 
-Listing often allows for a few additional like, pagination, filtering and sorting.
+Listing often allows for a few additional actions like, pagination, filtering and sorting. So, there you go...
 
 ### Listing query arguments
 
@@ -74,15 +87,16 @@ Every listing endpoint accepts the following query arguments:
 | argument      | description                                | example             | default |
 | ------------- | ------------------------------------------ | ------------------- | ------- |
 | page          | The page number starting at 0              | ?page=0             | 0       |
-| pageSize      | the number of item per page                | ?pageSize=5         | 10      |
+| pageSize      | the number of items per page               | ?pageSize=5         | 10      |
 | sortBy        | The attribute to sort the listing by       | ?sortBy=createdAt   | -       |
 | sortDirection | Sorting direction when sortBy is provided  | ?sortDirection=DESC | ASC     |
 | filter_xxx    | Filter record that must contains the value | ?filter_name=john   | -       |
 
 ### Listing Response
 
-Since you can provide pagination, it makes sense to have a response that allows you to display proper pagination. A call
-to a the listing [endpoint of users](http://localhost:8080/users/?pageSize=2&sortBy=id&sortDirection=DESC) would return:
+Since you can provide pagination, it makes sense to have a response that allows you to display proper pagination.
+
+A call to a [listing endpoint of users](http://localhost:8080/users/?pageSize=2&sortBy=id&sortDirection=DESC) would return:
 
 ```json
 {
