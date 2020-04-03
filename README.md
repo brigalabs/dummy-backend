@@ -2,8 +2,8 @@
 
 A ready-to-go REST API compliant server so you can prototype your front end. Just call the endpoint you wish you had and it’s available on the fly.
 
-- No database server to setup
-- No web server
+- No database to setup
+- No proxy server
 - No VM
 - No authentication
 
