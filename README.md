@@ -1,10 +1,16 @@
 # Dummy-backend
 
-A minimal REST API compliant server so you can prototype your front end.
+A ready-to-go REST API compliant server so you can prototype your front end. Just call the endpoint you wish you had and it’s available on the fly.
 
-The server will create tables and record as you're using it. You can
-then create, update, delete, get, list and query them using standard
-CRUD requests.
+- No database server to setup
+- No web server
+- No VM
+- No authentication
+
+The server will create tables and records as you need them. You can
+create, update, delete, get, list (including query, sorting, pagination) them using standard CRUD requests.
+
+When you're satified with your solution, you can start building the backend that matches your feature and not the opposite.
 
 ## Install
 
@@ -45,16 +51,17 @@ $ yarn start --d foo.json -p 8000
 
 ## Interactions
 
-By default the server will run on port 8080 on your localhost. The convention is having the table name as the first part of the URL followed by optional ID. For example, if you want to interact with
-your users table, use the following URLs:
+By default the server will run on port 8080 on your localhost. The convention is having the table name as the first part of the URL followed by optional ID.
+
+For example, if you want to interact with a users table, use the following URLs:
 
 | Method | URL        | description                             |
 | ------ | ---------- | --------------------------------------- |
-| GET    | /users/    | return a list of users                  |
 | GET    | /users/123 | return the user with ID 123             |
 | PUT    | /users/123 | updates the user with ID 123            |
 | DELETE | /users/123 | delete the user with ID 123             |
 | POST   | /users     | create a user (generate the ID for you) |
+| GET    | /users/    | return a list of users (more below)     |
 
 ## Listing
 
@@ -106,5 +113,6 @@ to a the listing [endpoint of users](http://localhost:8080/users/?pageSize=2&sor
 
 ## Persistence
 
-By default the database is stored in memory and is backed up to every
-one seconds in a file named `database.json`. The database is loaded back in memory when the server starts.
+By default the database is stored in memory and is backed up to every one seconds in a
+file (default to `database.json`).
+The database is loaded back in memory when the server starts.
