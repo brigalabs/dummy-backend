@@ -98,7 +98,7 @@ Every listing endpoint accepts the following query arguments:
 | sortDirection | Sorting direction when sortBy is provided  | ?sortDirection=DESC | ASC     |
 | filter_xxx    | Filter record that must contains the value | ?filter_name=john   | -       |
 
-_Note regarding the filters_: you can combine them as long as they target different attributes and their value is interpreted as a regular expression.
+_Note regarding the filters_: you can combine them as long as they target different attributes. Filter values are interpreted as a regular expression.
 
 ### Listing Response
 
