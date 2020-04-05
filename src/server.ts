@@ -12,7 +12,7 @@ export function start() {
       req: http.IncomingMessage,
       res: http.ServerResponse
     ) {
-      log("Request", req.method, req.url);
+      log(`\x1b[32m${req.method}\x1b[0m`, req.url);
 
       if (!req.url || req.url === "/") {
         return notFoundResponse(req, res);
