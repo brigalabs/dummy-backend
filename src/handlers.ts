@@ -1,15 +1,26 @@
-import { foundResponse, notFoundResponse, errorResponse } from "./response";
+import {
+  foundResponse,
+  notFoundResponse,
+  errorResponse,
+  corsResponse,
+} from "./response";
 import http from "http";
-import url from "url";
 import { parseRequest } from "./utils";
 import {
   deleteRecord,
   createRecord,
   updateRecord,
   getOne,
-  getMany
+  getMany,
 } from "./db";
 import { Row } from "./types";
+
+export function handleOption(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+) {
+  corsResponse(req, res);
+}
 
 export function handleDelete(
   req: http.IncomingMessage,

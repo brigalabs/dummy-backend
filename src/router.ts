@@ -1,7 +1,13 @@
 import http from "http";
 import { Row } from "./types";
 import { notFoundResponse } from "./response";
-import { handlePut, handleDelete, handleGet, handlePost } from "./handlers";
+import {
+  handlePut,
+  handleDelete,
+  handleGet,
+  handlePost,
+  handleOption,
+} from "./handlers";
 
 export function router(
   req: http.IncomingMessage,
@@ -20,6 +26,9 @@ export function router(
 
     case "PUT":
       return handlePut(req, res, body);
+
+    case "OPTIONS":
+      return handleOption(req, res);
 
     default:
       return notFoundResponse(req, res);
