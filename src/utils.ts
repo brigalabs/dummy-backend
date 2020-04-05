@@ -9,6 +9,10 @@ export function parseRequest(req: http.IncomingMessage) {
   return {
     tableName,
     id,
-    query: parsedUrl.query
+    query: parsedUrl.query,
   };
+}
+
+export async function waitFor(delay: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, delay));
 }

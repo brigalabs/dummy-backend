@@ -37,10 +37,11 @@ yarn start
 
 The start call accepts the following arguments:
 
-| argument   | alias | description                              | default       |
-| ---------- | ----- | ---------------------------------------- | ------------- |
-| --port     | -p    | set the serving port                     | 8080          |
-| --datafile | -d    | set the filename where data is persisted | database.json |
+| argument | alias | description                              | default       |
+| -------- | ----- | ---------------------------------------- | ------------- |
+| --port   | -p    | set the serving port                     | 8080          |
+| --file   | -f    | set the filename where data is persisted | database.json |
+| --delay  | -d    | set the delay prior to sending response  | 0             |
 
 So if you wanted to load the data stored in `foo.json` on port `8000` you'd use the following command:
 

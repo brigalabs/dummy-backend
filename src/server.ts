@@ -4,10 +4,11 @@ import { Row } from "./types";
 import { router } from "./router";
 import { config } from "./config";
 import { log } from "./log";
+import { waitFor } from "./utils";
 
 export function start() {
   http
-    .createServer(function(
+    .createServer(async function (
       req: http.IncomingMessage,
       res: http.ServerResponse
     ) {
@@ -17,13 +18,17 @@ export function start() {
         return notFoundResponse(req, res);
       }
 
+      if (config.delay) {
+        await waitFor(config.delay);
+      }
+
       const reqData: any[] = [];
 
       req
-        .on("error", err => {
+        .on("error", (err) => {
           console.error(err);
         })
-        .on("data", chunk => {
+        .on("data", (chunk) => {
           reqData.push(chunk);
         })
         .on("end", () => {

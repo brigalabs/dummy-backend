@@ -1,6 +1,7 @@
 export const config = {
   port: 8080,
-  datafile: "database.json"
+  datafile: "database.json",
+  delay: 0,
 };
 
 export function setDatafile(datafile: string) {
@@ -9,4 +10,8 @@ export function setDatafile(datafile: string) {
 
 export function setPort(port: number) {
   config.port = port;
+}
+
+export function setDelay(delay: number) {
+  config.delay = delay;
 }
