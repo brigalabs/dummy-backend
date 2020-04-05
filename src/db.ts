@@ -3,11 +3,11 @@ import {
   get,
   unset,
   set,
-  debounce,
+  throttle,
   slice,
   sortBy,
   filter,
-  startsWith
+  startsWith,
 } from "lodash";
 import { Database, Row, DBOptions, DBFilterBy, ManyRow } from "./types";
 import { v4 } from "uuid";
@@ -17,9 +17,9 @@ import { log } from "./log";
 
 let database: Database = {};
 
-const syncDatabaseFile = debounce(() => {
+const syncDatabaseFile = throttle(() => {
   const strDb = JSON.stringify(database, null, 2);
-  fs.writeFile(config.datafile, strDb, error => {
+  fs.writeFile(config.datafile, strDb, (error) => {
     if (error) {
       log(`Error sync database to file ${config.datafile}`, error);
     } else {
@@ -28,7 +28,7 @@ const syncDatabaseFile = debounce(() => {
   });
 }, 1000);
 
-fs.readFile(config.datafile, function(err, buf) {
+fs.readFile(config.datafile, function (err, buf) {
   if (err) {
     console.error("Could not read", config.datafile);
   } else {
@@ -45,7 +45,7 @@ export function createRecord(tableName: string, value: Row) {
     ...value,
     id,
     createdAt: now,
-    updatedAt: now
+    updatedAt: now,
   };
 
   set(database, `${tableName}.${id}`, newRow);
@@ -62,7 +62,7 @@ export function updateRecord(tableName: string, id: string, value: Row) {
       ...row,
       ...value,
       id,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     set(database, `${tableName}.${id}`, updatedRow);
@@ -98,7 +98,7 @@ const defaultOptions = {
   sortDirection: "ASC",
   filterBy: "",
   page: 0,
-  pageSize: 2
+  pageSize: 2,
 };
 
 export function getMany(tableName: string, options: DBOptions): ManyRow {
@@ -106,7 +106,7 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
 
   const opts = {
     ...defaultOptions,
-    ...options
+    ...options,
   };
 
   const sortDirection = opts.sortDirection === "DESC" ? "DESC" : "ASC";
@@ -122,7 +122,7 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
     if (startsWith(key, "filter_")) {
       filters.push({
         attribute: key.replace(/^filter_/, ""),
-        value: get(opts, key)
+        value: get(opts, key),
       });
     }
   }
@@ -131,7 +131,7 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
     for (const f of filters) {
       const match = new RegExp(f.value, "i");
 
-      recordList = filter(recordList, record =>
+      recordList = filter(recordList, (record) =>
         match.test(get(record, f.attribute))
       );
     }
@@ -156,6 +156,6 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
     pageSize: pageSize,
     page: page,
     sortBy: opts.sortBy,
-    sortDirection
+    sortDirection,
   };
 }
