@@ -1,6 +1,7 @@
 import { IncomingForm } from "formidable";
 import http from "http";
 import fs from "fs";
+import path from "path";
 import { map } from "lodash";
 
 import { errorResponse, foundResponse } from "../response";
@@ -22,8 +23,15 @@ export function upload(req: http.IncomingMessage, res: http.ServerResponse) {
     if (error) {
       errorResponse(req, res, error);
     } else {
-      const filenames = map(files, "file.path");
-      foundResponse(req, res, { filenames });
+      const filename = path.basename(files.file.path);
+      const url = `http://${config.hostname}:${config.port}/_upload/${filename}`;
+
+      foundResponse(req, res, {
+        url,
+        name: files.file.name,
+        size: files.file.size,
+        type: files.file.type,
+      });
     }
   });
 

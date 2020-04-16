@@ -51,5 +51,5 @@ export function start() {
         });
     })
     .listen(config.port);
-  log(`Serving request at http://localhost:${config.port}`);
+  log(`Serving request at http://${config.hostname}:${config.port}`);
 }

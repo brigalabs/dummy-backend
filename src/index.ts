@@ -1,6 +1,6 @@
 import yargs from "yargs";
 import { start } from "./server";
-import { setPort, setDatafile, setDelay } from "./config";
+import { setPort, setDatafile, setDelay, setHostname } from "./config";
 
 const argv = yargs
   .scriptName("dummy-backend")
@@ -12,7 +12,7 @@ const argv = yargs
   })
   .option("delay", {
     alias: "d",
-    default: 0,
+    default: 200,
     describe: "Delay prior to responding to a request",
     type: "number",
   })
@@ -22,11 +22,18 @@ const argv = yargs
     describe: "The filename to use to load and save the database",
     type: "string",
   })
+  .option("hostname", {
+    alias: "n",
+    default: "localhost",
+    describe: "The hostname of the server",
+    type: "string",
+  })
   .help()
   .alias("help", "h").argv;
 
 setPort(argv.port);
 setDatafile(argv.file);
 setDelay(argv.delay);
+setHostname(argv.hostname);
 
 start();

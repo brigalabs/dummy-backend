@@ -2,6 +2,7 @@ import { log, bold } from "./log";
 
 interface Config {
   port: number;
+  hostname: string;
   datafile: string;
   delay: number;
   upload: {
@@ -14,7 +15,8 @@ interface Config {
 export const config: Config = {
   port: 8080,
   datafile: "database.json",
-  delay: 0,
+  hostname: "localhost",
+  delay: 200,
   upload: {
     multiples: true,
     uploadDir: `${__dirname}/../upload`,
@@ -33,6 +35,11 @@ export function setPort(port: number) {
 }
 
 export function setDelay(delay: number) {
-  log(`Set delay to ${bold(delay)}`);
+  log(`Response delay is set to ${bold(delay)}`);
   config.delay = delay;
+}
+
+export function setHostname(hostname: string) {
+  log(`Serving hostname is set to ${bold(hostname)}`);
+  config.hostname = hostname;
 }

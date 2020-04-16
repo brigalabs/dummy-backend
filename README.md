@@ -37,16 +37,17 @@ yarn start
 
 The start call accepts the following arguments:
 
-| argument | alias | description                              | default       |
-| -------- | ----- | ---------------------------------------- | ------------- |
-| --port   | -p    | set the serving port                     | 8080          |
-| --file   | -f    | set the filename where data is persisted | database.json |
-| --delay  | -d    | set the delay prior to sending response  | 0             |
+| argument   | alias | description                              | default       |
+| ---------- | ----- | ---------------------------------------- | ------------- |
+| --port     | -p    | set the serving port                     | 8080          |
+| --file     | -f    | set the filename where data is persisted | database.json |
+| --delay    | -d    | set the delay prior to sending response  | 200           |
+| --hostname | -n    | set the hostname for serving             | localhost     |
 
 So if you wanted to load the data stored in `foo.json` on port `8000` you'd use the following command:
 
 ```
-$ yarn start -d foo.json -p 8000
+$ yarn start -f foo.json -p 8000
 4/2/2020, 8:11:45 PM Serving request at http://localhost:8000
 4/2/2020, 8:11:45 PM Loading data from foo.json ...
 4/2/2020, 8:11:45 PM Loading data done.
