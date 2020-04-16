@@ -148,7 +148,7 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
 
   // compute the page position
   const start = page * pageSize;
-  const end = page + 1 * pageSize;
+  const end = (page + 1) * pageSize;
 
   return {
     data: slice(recordList, start, end),
