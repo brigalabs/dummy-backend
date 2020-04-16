@@ -1,10 +1,12 @@
 import http from "http";
 import { notFoundResponse } from "./response";
+import { startsWith } from "lodash";
 import { Row } from "./types";
 import { router } from "./router";
 import { config } from "./config";
 import { log } from "./log";
 import { waitFor } from "./utils";
+import { featureRouter } from "./featureRouter";
 
 export function start() {
   http
@@ -14,12 +16,16 @@ export function start() {
     ) {
       log(`\x1b[32m${req.method}\x1b[0m`, req.url);
 
+      if (config.delay) {
+        await waitFor(config.delay);
+      }
+
       if (!req.url || req.url === "/") {
         return notFoundResponse(req, res);
       }
 
-      if (config.delay) {
-        await waitFor(config.delay);
+      if (startsWith(req.url, "/_")) {
+        return featureRouter(req, res);
       }
 
       const reqData: any[] = [];

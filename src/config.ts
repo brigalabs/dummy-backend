@@ -1,9 +1,25 @@
 import { log, bold } from "./log";
 
-export const config = {
+interface Config {
+  port: number;
+  datafile: string;
+  delay: number;
+  upload: {
+    multiples: boolean;
+    uploadDir: string;
+    keepExtensions: boolean;
+  };
+}
+
+export const config: Config = {
   port: 8080,
   datafile: "database.json",
   delay: 0,
+  upload: {
+    multiples: true,
+    uploadDir: `${__dirname}/../upload`,
+    keepExtensions: true,
+  },
 };
 
 export function setDatafile(datafile: string) {
