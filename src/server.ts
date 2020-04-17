@@ -1,5 +1,5 @@
 import http from "http";
-import { notFoundResponse } from "./response";
+import { notFoundResponse, errorResponse } from "./response";
 import { startsWith } from "lodash";
 import { Row } from "./types";
 import { router } from "./router";
@@ -45,6 +45,7 @@ export function start() {
             body = strData ? JSON.parse(strData) : {};
           } catch (error) {
             log(error);
+            return errorResponse(req, res, error);
           }
 
           router(req, res, body as Row);
