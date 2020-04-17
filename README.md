@@ -33,7 +33,7 @@ Run the server using `yarn start`
 yarn start
 ```
 
-### Arguments
+### Options
 
 The start call accepts the following arguments:
 
@@ -47,10 +47,16 @@ The start call accepts the following arguments:
 So if you wanted to load the data stored in `foo.json` on port `8000` you'd use the following command:
 
 ```
-$ yarn start -f foo.json -p 8000
-4/2/2020, 8:11:45 PM Serving request at http://localhost:8000
-4/2/2020, 8:11:45 PM Loading data from foo.json ...
-4/2/2020, 8:11:45 PM Loading data done.
+$ yarn start -d 150 -n 192.168.1.130 -f foo.json -p 8000
+yarn run v1.12.3
+...
+[4/17/2020, 12:56:52 PM] Using port 8000
+[4/17/2020, 12:56:52 PM] Database file is foo.json
+[4/17/2020, 12:56:52 PM] Response delay is set to 150
+[4/17/2020, 12:56:52 PM] Serving hostname is set to 192.168.1.130
+[4/17/2020, 12:56:52 PM] Serving request at http://192.168.1.130:8000
+[4/17/2020, 12:56:52 PM] Loading data from foo.json ...
+[4/17/2020, 12:56:52 PM] Loading data done.
 ```
 
 ## Interactions
