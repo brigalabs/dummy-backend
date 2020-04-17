@@ -77,6 +77,30 @@ export function handlePut(
   }
 }
 
+export function handlePatch(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  row: Row
+) {
+  const { tableName, id } = parseRequest(req);
+
+  try {
+    const record = getOne(tableName, id);
+
+    if (!record) {
+      return notFoundResponse(req, res);
+    }
+
+    const updatedRecord = updateRecord(tableName, id, {
+      ...record,
+      ...row,
+    });
+    return foundResponse(req, res, updatedRecord);
+  } catch (error) {
+    return errorResponse(req, res, error);
+  }
+}
+
 export function handleGet(req: http.IncomingMessage, res: http.ServerResponse) {
   const { tableName, id, query } = parseRequest(req);
 

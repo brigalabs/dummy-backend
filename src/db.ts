@@ -56,10 +56,7 @@ export function createRecord(tableName: string, value: Row) {
 
 export function updateRecord(tableName: string, id: string, value: Row) {
   if (id) {
-    const row = getOne(tableName, id);
-
     const updatedRow = {
-      ...row,
       ...value,
       id,
       updatedAt: new Date().toISOString(),

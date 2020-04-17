@@ -7,6 +7,7 @@ import {
   handleGet,
   handlePost,
   handleOption,
+  handlePatch,
 } from "./handlers";
 
 export function router(
@@ -26,6 +27,9 @@ export function router(
 
     case "PUT":
       return handlePut(req, res, body);
+
+    case "PATCH":
+      return handlePatch(req, res, body);
 
     case "OPTIONS":
       return handleOption(req, res);
