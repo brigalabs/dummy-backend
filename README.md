@@ -92,15 +92,13 @@ Returns a given record. When deleting, the object needs to exists or you'll get 
 ```json
 {
   "status": "success",
-  "data": [
-    {
-      "email": "wat@example.com",
-      "name": "John what",
-      "id": "f3a0c7c7-b9b0-4f91-a485-a643d653508a",
-      "createdAt": "2020-04-02T19:58:26.021Z",
-      "updatedAt": "2020-04-02T19:58:26.021Z"
-    }
-  ]
+  "data": {
+    "email": "wat@example.com",
+    "name": "John Wat",
+    "id": "f3a0c7c7-b9b0-4f91-a485-a643d653508a",
+    "createdAt": "2020-04-02T19:58:26.021Z",
+    "updatedAt": "2020-04-02T19:58:26.021Z"
+  }
 }
 ```
 
