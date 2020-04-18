@@ -65,13 +65,18 @@ export function handlePut(
   const { tableName, id } = parseRequest(req);
 
   try {
-    const updatedRecord = updateRecord(tableName, id, row);
+    const originalRecord = getOne(tableName, id);
 
-    if (updatedRecord) {
-      return foundResponse(req, res, updatedRecord);
-    } else {
+    if (!originalRecord) {
       return notFoundResponse(req, res);
     }
+
+    const updatedRecord = updateRecord(tableName, id, {
+      ...row,
+      createdAt: originalRecord.createdAt,
+    });
+
+    return foundResponse(req, res, updatedRecord);
   } catch (error) {
     return errorResponse(req, res, error);
   }
@@ -85,15 +90,16 @@ export function handlePatch(
   const { tableName, id } = parseRequest(req);
 
   try {
-    const record = getOne(tableName, id);
+    const originalRecord = getOne(tableName, id);
 
-    if (!record) {
+    if (!originalRecord) {
       return notFoundResponse(req, res);
     }
 
     const updatedRecord = updateRecord(tableName, id, {
-      ...record,
+      ...originalRecord,
       ...row,
+      createdAt: originalRecord.createdAt,
     });
     return foundResponse(req, res, updatedRecord);
   } catch (error) {
