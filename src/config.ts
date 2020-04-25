@@ -35,7 +35,7 @@ export function setPort(port: number) {
 }
 
 export function setDelay(delay: number) {
-  log(`Response delay is set to ${bold(delay)}ms`);
+  log(`Response delay is set to ${bold(delay)} ms`);
   config.delay = delay;
 }
 

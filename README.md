@@ -52,7 +52,7 @@ yarn run v1.12.3
 ...
 [4/17/2020, 12:56:52 PM] Using port 8000
 [4/17/2020, 12:56:52 PM] Database file is foo.json
-[4/17/2020, 12:56:52 PM] Response delay is set to 150ms
+[4/17/2020, 12:56:52 PM] Response delay is set to 150 ms
 [4/17/2020, 12:56:52 PM] Serving hostname is set to 192.168.1.130
 [4/17/2020, 12:56:52 PM] Serving request at http://192.168.1.130:8000
 [4/17/2020, 12:56:52 PM] Loading data from foo.json ...

@@ -2,32 +2,21 @@ import http from "http";
 import fs from "fs";
 import path from "path";
 import mime from "mime-types";
+import NodeStatic from "node-static";
 
 import { config } from "../config";
 import { parseRequest } from "../utils";
-import { notFoundResponse } from "../response";
+
+var nodeStatic = new NodeStatic.Server(config.upload.uploadDir);
 
 export function getFile(req: http.IncomingMessage, res: http.ServerResponse) {
-  const { id } = parseRequest(req);
+  req
+    .addListener("end", function () {
+      // retrieve the filename
+      const { id } = parseRequest(req);
 
-  if (!id) {
-    return notFoundResponse(req, res);
-  }
-
-  const filePath = path.join(config.upload.uploadDir, id.replace("/", ""));
-
-  fs.exists(filePath, (exists) => {
-    if (exists) {
-      const { size } = fs.statSync(filePath);
-
-      res.writeHead(200, {
-        "Content-Type": mime.lookup(filePath) || "application/octet-stream",
-        "Content-Length": size,
-      });
-      const readStream = fs.createReadStream(filePath);
-      readStream.pipe(res);
-    } else {
-      return notFoundResponse(req, res);
-    }
-  });
+      // nodeStatic handles 304, caching, path normalization...
+      nodeStatic.serve({ ...req, url: id } as http.IncomingMessage, res);
+    })
+    .resume();
 }
