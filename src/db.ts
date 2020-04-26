@@ -1,13 +1,14 @@
 import {
-  values,
+  filter,
   get,
-  unset,
+  lowerCase,
   set,
-  throttle,
   slice,
   sortBy,
-  filter,
   startsWith,
+  throttle,
+  unset,
+  values,
 } from "lodash";
 import { Database, Row, DBOptions, DBFilterBy, ManyRow } from "./types";
 import { v4 } from "uuid";
@@ -136,11 +137,13 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
 
   // Sort the results
   if (opts.sortBy) {
-    recordList = sortBy(recordList, opts.sortBy);
+    recordList = sortBy(recordList, (record) =>
+      lowerCase(get(record, opts.sortBy))
+    );
+  }
 
-    if (sortDirection !== "ASC") {
-      recordList.reverse();
-    }
+  if (sortDirection !== "ASC") {
+    recordList.reverse();
   }
 
   // compute the page position
