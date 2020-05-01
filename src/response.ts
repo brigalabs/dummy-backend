@@ -7,7 +7,8 @@ export function corsResponse(
   res.writeHead(200, {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": req.headers.origin,
-    "Access-Control-Allow-Methods": "POST, GET, PUT, POST, OPTIONS",
+    "Access-Control-Allow-Methods":
+      "POST, GET, PUT, PATCH, POST, DELETE, OPTIONS",
     "Access-Control-Max-Age": 3600 * 24,
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Credentials": "true",
