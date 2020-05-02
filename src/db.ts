@@ -95,7 +95,7 @@ const defaultOptions = {
   sortBy: "",
   sortDirection: "ASC",
   page: 0,
-  pageSize: 2,
+  pageSize: 10,
 };
 
 export function getMany(tableName: string, options: DBOptions): ManyRow {

@@ -63,7 +63,7 @@ const eqFilter: FilterFunction = (row, attribute, value) => {
 const gtFilter: FilterFunction = (row, attribute, value) => {
   if (has(row, attribute)) {
     const attributeValue = get(row, attribute);
-    return castValue(attributeValue, value) > attributeValue;
+    return attributeValue > castValue(attributeValue, value);
   }
   return false;
 };
@@ -71,7 +71,7 @@ const gtFilter: FilterFunction = (row, attribute, value) => {
 const gteFilter: FilterFunction = (row, attribute, value) => {
   if (has(row, attribute)) {
     const attributeValue = get(row, attribute);
-    return castValue(attributeValue, value) >= attributeValue;
+    return attributeValue >= castValue(attributeValue, value);
   }
   return false;
 };
@@ -79,7 +79,7 @@ const gteFilter: FilterFunction = (row, attribute, value) => {
 const ltFilter: FilterFunction = (row, attribute, value) => {
   if (has(row, attribute)) {
     const attributeValue = get(row, attribute);
-    return castValue(attributeValue, value) < attributeValue;
+    return attributeValue < castValue(attributeValue, value);
   }
   return false;
 };
@@ -87,7 +87,7 @@ const ltFilter: FilterFunction = (row, attribute, value) => {
 const lteFilter: FilterFunction = (row, attribute, value) => {
   if (has(row, attribute)) {
     const attributeValue = get(row, attribute);
-    return castValue(attributeValue, value) <= attributeValue;
+    return attributeValue <= castValue(attributeValue, value);
   }
   return false;
 };
