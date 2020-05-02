@@ -1,20 +1,20 @@
 import {
-  filter,
   get,
   lowerCase,
   set,
   slice,
   sortBy,
-  startsWith,
+  concat,
   throttle,
   unset,
   values,
 } from "lodash";
-import { Database, Row, DBOptions, DBFilterBy, ManyRow } from "./types";
+import { Database, Row, DBOptions, ManyRow, DBFilter } from "./types";
 import { v4 } from "uuid";
 import fs from "fs";
 import { config } from "./config";
 import { log } from "./log";
+import { applyFilters } from "./filter";
 
 let database: Database = {};
 
@@ -94,7 +94,6 @@ export function getOne(tableName: string, id: string): Row | void {
 const defaultOptions = {
   sortBy: "",
   sortDirection: "ASC",
-  filterBy: "",
   page: 0,
   pageSize: 2,
 };
@@ -113,26 +112,14 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
 
   // transform the existing table into a list
   let recordList = values(table);
+  let filters: DBFilter[] = [];
 
   // filter the list for every filter we receive
-  const filters: DBFilterBy[] = [];
-  for (const key in opts) {
-    if (startsWith(key, "filter_")) {
-      filters.push({
-        attribute: key.replace(/^filter_/, ""),
-        value: get(opts, key),
-      });
-    }
-  }
-
-  if (filters.length) {
-    for (const f of filters) {
-      const match = new RegExp(f.value, "i");
-
-      recordList = filter(recordList, (record) =>
-        match.test(get(record, f.attribute))
-      );
-    }
+  const rawFilters = opts["filter"];
+  if (rawFilters) {
+    // if only one filter was provided it will be a string
+    // so we will use concat rawFilters to always cast it as an array,
+    [recordList, filters] = applyFilters(recordList, concat(rawFilters));
   }
 
   // Sort the results
@@ -157,5 +144,6 @@ export function getMany(tableName: string, options: DBOptions): ManyRow {
     page: page,
     sortBy: opts.sortBy,
     sortDirection,
+    filters,
   };
 }

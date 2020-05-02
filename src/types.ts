@@ -27,7 +27,22 @@ export interface DBOptions {
   sortDirection?: DBSortDirection;
   page?: DBPage;
   pageSize?: DBPageSize;
+  filter?: string[];
   [otherProps: string]: any;
+}
+
+export type DBFilterOperator =
+  | "gt"
+  | "gte"
+  | "eq"
+  | "lt"
+  | "lte"
+  | "has"
+  | "reg";
+export interface DBFilter {
+  attribute: string;
+  operator: DBFilterOperator | string;
+  value: string;
 }
 
 export interface ManyRow {
@@ -37,4 +52,5 @@ export interface ManyRow {
   page: DBPage;
   sortBy: DBSortBy;
   sortDirection: DBSortDirection;
+  filters: DBFilter[];
 }

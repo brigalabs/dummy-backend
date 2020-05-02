@@ -135,15 +135,31 @@ Listing often allows for a few additional actions like, pagination, filtering an
 
 Every listing endpoint accepts the following query arguments:
 
-| argument      | description                                | example             | default |
-| ------------- | ------------------------------------------ | ------------------- | ------- |
-| page          | The page number starting at 0              | ?page=0             | 0       |
-| pageSize      | the number of items per page               | ?pageSize=5         | 10      |
-| sortBy        | The attribute to sort the listing by       | ?sortBy=createdAt   | -       |
-| sortDirection | Sorting direction when sortBy is provided  | ?sortDirection=DESC | ASC     |
-| filter_xxx    | Filter record that must contains the value | ?filter_name=john   | -       |
+| argument      | description                               | example                                            | default |
+| ------------- | ----------------------------------------- | -------------------------------------------------- | ------- |
+| page          | The page number starting at 0             | ?page=0                                            | 0       |
+| pageSize      | the number of items per page              | ?pageSize=5                                        | 10      |
+| sortBy        | The attribute to sort the listing by      | ?sortBy=createdAt                                  | -       |
+| sortDirection | Sorting direction when sortBy is provided | ?sortDirection=DESC                                | ASC     |
+| filter        | Filter records                            | ?filter=name:john&filter=createdAt[gte]:2020-05-01 | -       |
 
-_Note regarding the filters_: you can combine them as long as they target different attributes. Filter values are interpreted as a regular expression.
+### Listing filters
+
+You can add as many filter as you want on the query. Every filter is composed as follow:
+
+```
+filter=<attribute>[operator]:<value>
+```
+
+| operator | description                                  |
+| -------- | -------------------------------------------- |
+| eq       | equal, case sensitive (default)              |
+| gt       | greater than                                 |
+| lt       | lesser than                                  |
+| gte      | lesser than or equal                         |
+| lte      | lesser than or equal                         |
+| reg      | regular expression                           |
+| has      | contained specified value (case insensitive) |
 
 ### Listing Response
 
