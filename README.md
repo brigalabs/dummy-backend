@@ -1,8 +1,10 @@
 # Dynamic REST API for protyping
 
-If you want to prototype some idea or web solution but do not want to spend time creating a backend for it, dummy-backend could be the solution you've been looking for.
+Simply speaking, Dummy-backend is a zero-configuration REST backend that creates the resource (aka. REST endpoint) when you request it.
 
-Dummy-backend is a ready-to-go REST API compliant server so you can prototype and focus on your front end quickly. Simply call the endpoint you wish you had and it’s available on the fly.
+## Why would I need that?
+
+Lets say, you need to create a product record, just make a POST request the `/product` endpoint, the backend will create a `product` JSON record and return it. You can then retrive it through a GET call to `/product/<id>` request, modify it via PUT on `/product/<id>`, delete it, replace it, paginate it or upload a file... **You don't have to configure anything on the backend**, no product table to create, no form... it just works with good practice REST API protocol.
 
 - No database to setup
 - No proxy server
@@ -13,7 +15,9 @@ The server will create and persist tables and records as you need them while res
 REST best practices. You can [create](#create-a-new-record), [update](#update-a-record), [delete](#delete-a-record), [get](#get-a-single-record), [replace](#replace-a-record), [list](#listing) (including [query, sorting, pagination](#listing-query-arguments), [filter](#listing-filters)) using
 the standard CRUD requests you know (see below).
 
-When you're satified with your solution, you can start building a backend that matches your features and not the opposite.
+Once you're satified with your solution, you can start building a backend that matches your features and not the opposite.
+
+**Do not use Dummy-backend in production**, it is not secure nor performant enough for that. It is meant to be used for prototyping only.
 
 ## Install
 
