@@ -85,24 +85,29 @@ There is also additional "feature" endpoints. Feature endpoints don't have a `<r
 | Upload     | PUT    | /\_upload                | uploads a file to the upload folder |
 | Get a File | GET    | /\_upload/upload_123.jpg | retrieve a previously uploaded file |
 
-## Get A Single Record `GET`
+## Create a New Record
 
-Returns a given record. When deleting, the object needs to exists or you'll get a 404 response. The response would look as follow.
+This is a cURL request creating a new user
+
+```sh
+curl --request POST "http://localhost:8080/users" \
+  --header "Content-Type: application/json" \
+  --data '{"name": "John Doe"}'
+```
+
+And the created user as a JSON response (`HTTP/1.1 200 OK`):
 
 ```json
 {
   "status": "success",
   "data": {
-    "email": "wat@example.com",
-    "name": "John Wat",
-    "id": "f3a0c7c7-b9b0-4f91-a485-a643d653508a",
-    "createdAt": "2020-04-02T19:58:26.021Z",
-    "updatedAt": "2020-04-02T19:58:26.021Z"
+    "name": "Jonh Doe",
+    "id": "9b3521a4-0e08-471b-8434-19fcb2cc5899",
+    "createdAt": "2021-03-29T14:03:42.293Z",
+    "updatedAt": "2021-03-29T14:03:42.293Z"
   }
 }
 ```
-
-## Create a New Record `POST`
 
 Every object created will be augmented with 3 attributes:
 
@@ -116,6 +121,30 @@ Update will combine the data provided with the existing record.
 It will also update the `updatedAt` to reflect current date.
 Note that, when updating, the object needs to exist or you'll get a 404 response.
 
+If we wanted to only update a given record (here the previously created user),
+we could use PATCH as follow:
+
+```sh
+curl --request PATCH "http://localhost:8080/users/9b3521a4-0e08-471b-8434-19fcb2cc5899" \
+  --header "Content-Type: application/json" \
+  --data '{"age": "32"}'
+```
+
+JSON response would be:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": "John Doe",
+    "id": "9b3521a4-0e08-471b-8434-19fcb2cc5899",
+    "createdAt": "2021-03-29T14:03:42.293Z",
+    "updatedAt": "2021-03-29T14:08:44.050Z",
+    "age": "32"
+  }
+}
+```
+
 ## Replace a Record `PUT`
 
 Replaces an existing record (beside it's ID) with the data provided. Every missing
@@ -123,9 +152,72 @@ attribute will be removed from the record.
 It will also update the `updatedAt` to the current date.
 Note that, when updating, the object needs to exists or you'll get a 404 response.
 
+## Get A Single Record
+
+Returns a given record, the object needs to exists or you'll get a 404 response.
+
+To retrieve a user:
+
+```sh
+curl --request GET "http://localhost:8080/users/9b3521a4-0e08-471b-8434-19fcb2cc5899" \
+  --header "Content-Type: application/json"
+```
+
+JSON response would be:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": "John Doe",
+    "id": "9b3521a4-0e08-471b-8434-19fcb2cc5899",
+    "createdAt": "2021-03-29T14:03:42.293Z",
+    "updatedAt": "2021-03-29T14:08:44.050Z",
+    "age": "32"
+  }
+}
+```
+
 ## Delete a Record `DELETE`
 
 Deletes a given record. When deleting, the object needs to exists or you'll get a 404 response.
+
+Example, deleting a record that does not exist (HTTP/1.1 404 Not Found):
+
+```sh
+curl --request GET "http://localhost:8080/users/does-not-exist" \
+  --header "Content-Type: application/json"
+```
+
+```json
+{
+  "status": "error",
+  "error": "not_found",
+  "message": "[GET] /users/does-not-exist does not exist."
+}
+```
+
+Example when the record exist:
+
+```sh
+curl --request GET "http://localhost:8080/users/9b3521a4-0e08-471b-8434-19fcb2cc5899" \
+  --header "Content-Type: application/json"
+```
+
+JSON response contains the deleted data:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": "John Doe",
+    "id": "9b3521a4-0e08-471b-8434-19fcb2cc5899",
+    "createdAt": "2021-03-29T14:03:42.293Z",
+    "updatedAt": "2021-03-29T14:08:44.050Z",
+    "age": "32"
+  }
+}
+```
 
 ## Listing `GET`
 
@@ -148,7 +240,9 @@ Every listing endpoint accepts the following query arguments:
 You can add as many filter as you want on the query. Every filter is composed as follow:
 
 ```
+
 filter=<attribute>[operator]:<value>&filter=<attribute>[operator]:<value>&...
+
 ```
 
 | operator | description                                 |
