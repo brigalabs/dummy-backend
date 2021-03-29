@@ -202,7 +202,7 @@ JSON response would be:
 }
 ```
 
-## Delete a Record `DELETE`
+## Delete a Record
 
 Deletes a given record. When deleting, the record needs to exists or you'll get a 404 response.
 
@@ -243,7 +243,7 @@ JSON response contains the deleted data under the `data` attribute:
 }
 ```
 
-## Listing `GET`
+## Listing
 
 Listing often allows for a few additional actions like, pagination, filtering and sorting. So, here you go...
 
