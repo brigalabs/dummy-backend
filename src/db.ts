@@ -13,7 +13,7 @@ import { Database, Row, DBOptions, ManyRow, DBFilter } from "./types";
 import { v4 } from "uuid";
 import fs from "fs";
 import { config } from "./config";
-import { log } from "./log";
+import { log, errorLog } from "./log";
 import { applyFilters } from "./filter";
 
 let database: Database = {};
@@ -29,14 +29,28 @@ const syncDatabaseFile = throttle(() => {
   });
 }, 1000);
 
+// create the dabase file if it does not exist
+if (!fs.existsSync(config.datafile)) {
+  fs.writeFileSync(config.datafile, "{}");
+  log(`Database file "${config.datafile}" has been created.`);
+}
+
 fs.readFile(config.datafile, function (err, buf) {
   if (err) {
-    console.error("Could not read", config.datafile);
-  } else {
-    log(`Loading data from ${config.datafile} ...`);
-    database = JSON.parse(buf.toString()) as Database;
-    log("Loading data done.");
+    errorLog("Error opening database file", config.datafile);
+    throw err;
   }
+
+  log(`Loading data from ${config.datafile} ...`);
+  try {
+    database = JSON.parse(buf.toString()) as Database;
+  } catch (err) {
+    errorLog(
+      `Could not parse database file "${config.datafile}". Make sure it is a valid JSON object or delete it.`
+    );
+    throw err;
+  }
+  log("Loading data done.");
 });
 
 export function createRecord(tableName: string, value: Row) {

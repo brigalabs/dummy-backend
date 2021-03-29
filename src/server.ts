@@ -4,7 +4,7 @@ import { startsWith } from "lodash";
 import { Row } from "./types";
 import { router } from "./router";
 import { config } from "./config";
-import { log } from "./log";
+import { errorLog, log } from "./log";
 import { waitFor } from "./utils";
 import { featureRouter } from "./featureRouter";
 
@@ -32,7 +32,7 @@ export function start() {
 
       req
         .on("error", (err) => {
-          console.error(err);
+          errorLog(err);
         })
         .on("data", (chunk) => {
           reqData.push(chunk);
