@@ -6,6 +6,7 @@
   "repository": "git@github.com:debrice/dummy-backend.git",
   "author": "Brice Leroy <bbrriiccee@gmail.com>",
   "license": "MIT",
+  "url": "https://brigalabs.github.io/dummy-backend/",
   "scripts": {
     "start": "ts-node ./src/index.ts"
   },
