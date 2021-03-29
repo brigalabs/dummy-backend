@@ -17,7 +17,7 @@ When you're satified with your solution, you can start building a backend that m
 Clone this repository
 
 ```sh
-git clone git@github.com:debrice/dummy-backend.git
+git clone git@github.com:brigalabs/dummy-backend.git
 ```
 
 Install the dependencies using `yarn`
@@ -115,14 +115,13 @@ Every object created will be augmented with 3 attributes:
 - `createdAt`: A ISO date string like `"2021-03-29T13:28:59.013Z"`
 - `updatedAt`: A ISO date string like `"2021-03-29T13:28:59.013Z"`
 
-## Update a Record `PATCH`
+## Update a Record
 
 Update will combine the data provided with the existing record.
 It will also update the `updatedAt` to reflect current date.
 Note that, when updating, the object needs to exist or you'll get a 404 response.
 
-If we wanted to only update a given record (here the previously created user),
-we could use PATCH as follow:
+This is an example of updating a user adding an age field:
 
 ```sh
 curl --request PATCH "http://localhost:8080/users/9b3521a4-0e08-471b-8434-19fcb2cc5899" \
@@ -145,12 +144,37 @@ JSON response would be:
 }
 ```
 
-## Replace a Record `PUT`
+## Replace a Record
 
 Replaces an existing record (beside it's ID) with the data provided. Every missing
 attribute will be removed from the record.
 It will also update the `updatedAt` to the current date.
 Note that, when updating, the object needs to exists or you'll get a 404 response.
+
+For example, let's replace our John Doe user by Jane Roe:
+
+```sh
+curl --request PUT "http://localhost:8080/users/9b3521a4-0e08-471b-8434-19fcb2cc5899" \
+  --header "Content-Type: application/json" \
+  --data '{"name": "Jane Roe"}'
+```
+
+The server will return you the replaced record.
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": "Jane Roe",
+    "createdAt": "2021-03-29T15:05:07.248Z",
+    "id": "a8c9e739-dff3-4bdb-825c-81595d8e411f",
+    "updatedAt": "2021-03-29T15:06:03.476Z"
+  }
+}
+```
+
+Note that since this is a replace operating, only the provided data is stored, you the
+user had an `age` attribute before, it is now gone.
 
 ## Get A Single Record
 
@@ -180,12 +204,12 @@ JSON response would be:
 
 ## Delete a Record `DELETE`
 
-Deletes a given record. When deleting, the object needs to exists or you'll get a 404 response.
+Deletes a given record. When deleting, the record needs to exists or you'll get a 404 response.
 
 Example, deleting a record that does not exist (HTTP/1.1 404 Not Found):
 
 ```sh
-curl --request GET "http://localhost:8080/users/does-not-exist" \
+curl --request DELETE "http://localhost:8080/users/does-not-exist" \
   --header "Content-Type: application/json"
 ```
 
@@ -193,18 +217,18 @@ curl --request GET "http://localhost:8080/users/does-not-exist" \
 {
   "status": "error",
   "error": "not_found",
-  "message": "[GET] /users/does-not-exist does not exist."
+  "message": "[DELETE] /users/does-not-exist does not exist."
 }
 ```
 
 Example when the record exist:
 
 ```sh
-curl --request GET "http://localhost:8080/users/9b3521a4-0e08-471b-8434-19fcb2cc5899" \
+curl --request DELETE "http://localhost:8080/users/9b3521a4-0e08-471b-8434-19fcb2cc5899" \
   --header "Content-Type: application/json"
 ```
 
-JSON response contains the deleted data:
+JSON response contains the deleted data under the `data` attribute:
 
 ```json
 {
@@ -223,6 +247,70 @@ JSON response contains the deleted data:
 
 Listing often allows for a few additional actions like, pagination, filtering and sorting. So, here you go...
 
+For example, if you wanted to retrieve all the users (in a paginated fashion):
+
+```sh
+curl --request GET "http://localhost:8080/users/"
+```
+
+This is the response you could get:
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "name": "Darragh Lake",
+      "id": "63a12046-7337-4c3c-8ddb-7331808224c2",
+      "createdAt": "2021-03-29T14:00:05.548Z",
+      "updatedAt": "2021-03-29T14:00:05.548Z"
+    },
+    {
+      "name": "Frank Stevenson",
+      "id": "9a205d6c-f336-4391-9097-33003104dbaf",
+      "createdAt": "2021-03-29T14:00:29.256Z",
+      "updatedAt": "2021-03-29T14:00:29.256Z"
+    },
+    {
+      "name": "Caden Glover",
+      "id": "c864d1e4-104c-4a2a-93bb-7893edab881b",
+      "createdAt": "2021-03-29T14:02:01.866Z",
+      "updatedAt": "2021-03-29T14:02:01.866Z"
+    },
+    {
+      "name": "Claude Washington",
+      "id": "40f92c97-f88c-49d3-8359-8b2816e26833",
+      "createdAt": "2021-03-29T14:02:43.757Z",
+      "updatedAt": "2021-03-29T14:02:43.757Z"
+    },
+    {
+      "name": "Ayah Robbin",
+      "id": "d4aba19a-4044-4ca1-bb7c-532d44e57b96",
+      "createdAt": "2021-03-29T14:03:24.631Z",
+      "updatedAt": "2021-03-29T14:03:24.631Z"
+    },
+    {
+      "name": "Alicia Riggs",
+      "id": "81f38d70-910a-444d-b7e2-6b7b0efa3462",
+      "createdAt": "2021-03-29T14:05:48.843Z",
+      "updatedAt": "2021-03-29T14:05:48.843Z"
+    },
+    {
+      "name": "Hermione Cruz",
+      "createdAt": "2021-03-29T15:05:07.248Z",
+      "id": "a8c9e739-dff3-4bdb-825c-81595d8e411f",
+      "updatedAt": "2021-03-29T15:06:03.476Z"
+    }
+  ],
+  "total": 7,
+  "pageSize": 10,
+  "page": 0,
+  "sortBy": "",
+  "sortDirection": "ASC",
+  "filters": []
+}
+```
+
 ### Listing query arguments `GET`
 
 Every listing endpoint accepts the following query arguments:
@@ -235,14 +323,47 @@ Every listing endpoint accepts the following query arguments:
 | sortDirection | sorting direction when sortBy is provided | ?sortDirection=DESC                                | ASC     |
 | filter        | filter records                            | ?filter=name:john&filter=createdAt[gte]:2020-05-01 | -       |
 
+If you wanted to obtain the second page, with 2 records per page and
+sorted by name:
+
+```sh
+curl --request GET "http://localhost:8080/users/?pageSize=2&page=2&sortBy=name"
+```
+
+You'd obtain the following result:
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "name": "Darragh Lake",
+      "id": "63a12046-7337-4c3c-8ddb-7331808224c2",
+      "createdAt": "2021-03-29T14:00:05.548Z",
+      "updatedAt": "2021-03-29T14:00:05.548Z"
+    },
+    {
+      "name": "Frank Stevenson",
+      "id": "9a205d6c-f336-4391-9097-33003104dbaf",
+      "createdAt": "2021-03-29T14:00:29.256Z",
+      "updatedAt": "2021-03-29T14:00:29.256Z"
+    }
+  ],
+  "total": 7,
+  "pageSize": 2,
+  "page": 2,
+  "sortBy": "name",
+  "sortDirection": "ASC",
+  "filters": []
+}
+```
+
 ### Listing filters
 
 You can add as many filter as you want on the query. Every filter is composed as follow:
 
 ```
-
 filter=<attribute>[operator]:<value>&filter=<attribute>[operator]:<value>&...
-
 ```
 
 | operator | description                                 |
@@ -255,6 +376,35 @@ filter=<attribute>[operator]:<value>&filter=<attribute>[operator]:<value>&...
 | reg      | regular expression                          |
 | has      | contains specified value (case insensitive) |
 
+for example, you could filter the list of user with only the value
+`"Lake"`:
+
+```sh
+curl --request GET "http://localhost:8080/users/?pageSize=2&filter=name[has]:lake"
+```
+
+to get the following result:
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "name": "Darragh Lake",
+      "id": "63a12046-7337-4c3c-8ddb-7331808224c2",
+      "createdAt": "2021-03-29T14:00:05.548Z",
+      "updatedAt": "2021-03-29T14:00:05.548Z"
+    }
+  ],
+  "total": 1,
+  "pageSize": 2,
+  "page": 0,
+  "sortBy": "",
+  "sortDirection": "ASC",
+  "filters": [{ "attribute": "name", "operator": "has", "value": "Lake" }]
+}
+```
+
 ### Listing Response
 
 Since the listing endpoint accepts arguments for pagination, it makes sense to receive a response that allows you to display proper pagination.
@@ -266,30 +416,29 @@ A call to a [listing endpoint of users](http://localhost:8080/users/?pageSize=2&
   "status": "success",
   "data": [
     {
-      "email": "wat@example.com",
-      "name": "John what",
-      "id": "f3a0c7c7-b9b0-4f91-a485-a643d653508a",
-      "createdAt": "2020-04-02T19:58:26.021Z",
-      "updatedAt": "2020-04-02T19:58:26.021Z"
+      "name": "Ayah Robbin",
+      "id": "d4aba19a-4044-4ca1-bb7c-532d44e57b96",
+      "createdAt": "2021-03-29T14:03:24.631Z",
+      "updatedAt": "2021-03-29T14:03:24.631Z"
     },
     {
-      "email": "jane@example.com",
-      "name": "Jane Doe",
-      "id": "f0ccc71e-9411-454d-895a-3dc528e78872",
-      "createdAt": "2020-04-02T19:58:38.601Z",
-      "updatedAt": "2020-04-02T19:58:38.601Z"
+      "name": "Caden Glover",
+      "id": "c864d1e4-104c-4a2a-93bb-7893edab881b",
+      "createdAt": "2021-03-29T14:02:01.866Z",
+      "updatedAt": "2021-03-29T14:02:01.866Z"
     }
   ],
-  "total": 10,
+  "total": 7,
   "pageSize": 2,
   "page": 0,
   "sortBy": "id",
-  "sortDirection": "DESC"
+  "sortDirection": "DESC",
+  "filters": []
 }
 ```
 
 ## Persistence
 
-By default the database is stored in memory and is backed up to every one seconds in a
-file (default to `database.json`).
+By default the database is stored in memory and is backed up to
+every one seconds in a file (default to `database.json`).
 The database is loaded back in memory when the server starts.
