@@ -1,4 +1,4 @@
-# Dummy-backend
+# Dynamic REST API for protyping
 
 If you want to prototype some idea or web solution but do not want to spend time creating a backend for it, dummy-backend could be the solution you've been looking for.
 
@@ -9,8 +9,9 @@ Dummy-backend is a ready-to-go REST API compliant server so you can prototype an
 - No VM
 - No authentication
 
-The server will create and persist tables and records as you need them. You can
-create, update, delete, get, list (including query, sorting, pagination) using the standard CRUD requests you know (see below).
+The server will create and persist tables and records as you need them while respecting HTTP
+REST best practices. You can [create](#create-a-new-record), [update](#update-a-record), [delete](#delete-a-record), [get](#get-a-single-record), [replace](#replace-a-record), [list](#listing) (including [query, sorting, pagination](#listing-query-arguments), [filter](#listing-filters)) using
+the standard CRUD requests you know (see below).
 
 When you're satified with your solution, you can start building a backend that matches your features and not the opposite.
 
@@ -313,7 +314,7 @@ This is the response you could get:
 }
 ```
 
-### Listing query arguments `GET`
+### Listing query arguments
 
 Every listing endpoint accepts the following query arguments:
 
